@@ -1,7 +1,6 @@
 <?php
 include("../MEDICAMENT/db.php");
 
-// Récupérer tous les achats avec les détails des médicaments
 $query = "SELECT A.numAchat, A.nomClient, A.dateAchat, 
           COALESCE(M.Design, DA.design_archive) AS Design,
           DA.numMedoc, DA.nbr, DA.design_archive
@@ -12,21 +11,15 @@ $query = "SELECT A.numAchat, A.nomClient, A.dateAchat,
 
 $result = $pdo->query($query);
 $achats = $result->fetchAll(PDO::FETCH_ASSOC);
-
-// Récupérer les médicaments pour le formulaire d'ajout
 $sqlMeds = "SELECT numMedoc, Design FROM MEDICAMENT WHERE stock > 0 ORDER BY Design";
 $stmtMeds = $pdo->query($sqlMeds);
 $medicaments = $stmtMeds->fetchAll(PDO::FETCH_ASSOC);
-
-// Requête pour les médicaments en rupture (pour la sidebar)
 $ruptureQuery = "SELECT numMedoc, Design, prix_unitaire, stock 
                  FROM MEDICAMENT 
                  WHERE stock < 5 
                  ORDER BY stock ASC";
 $ruptureStmt = $pdo->query($ruptureQuery);
 $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Préparer les données groupées pour les modales
 $grouped = [];
 foreach ($achats as $achat) {
     $grouped[$achat['numAchat']]['info'] = [
@@ -103,8 +96,6 @@ foreach ($achats as $achat) {
             text-align: center;
             font-size: 1.1rem;
         }
-        
-        /* Main Content Styles */
         #content {
             margin-left: 250px;
             padding: 1.5rem;
@@ -113,7 +104,6 @@ foreach ($achats as $achat) {
             background-color: #f8f9fa;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
@@ -413,7 +403,6 @@ foreach ($achats as $achat) {
     </div>
 </div>
 
-<!-- Modal Ajouter -->
 <div class="modal fade" id="modalAjout" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -482,7 +471,6 @@ foreach ($achats as $achat) {
     </div>
 </div>
 
-<!-- Modals de modification et suppression -->
 <?php foreach ($grouped as $numAchat => $data) : ?>
     Copy
 
@@ -571,7 +559,6 @@ foreach ($achats as $achat) {
     </div>
 </div>
 
-    <!-- Modal Suppression -->
     <div class="modal fade" id="deleteModal<?= $numAchat ?>" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -618,13 +605,11 @@ foreach ($achats as $achat) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Sidebar toggle
     document.getElementById('sidebarToggle').addEventListener('click', function() {
         document.getElementById('sidebar').classList.toggle('active');
         document.getElementById('content').classList.toggle('sidebar-active');
     });
     
-    // Close sidebar on mobile when clicking a link
     document.querySelectorAll('.sidebar-link').forEach(link => {
         link.addEventListener('click', function() {
             if (window.innerWidth < 768) {
@@ -634,11 +619,9 @@ foreach ($achats as $achat) {
         });
     });
 
-    // Gestion des médicaments dans le formulaire d'ajout
     const medContainer = document.getElementById('medicaments-container');
     const medCount = document.getElementById('medCount');
     
-    // Ajouter un médicament
     document.getElementById('addMedicament').addEventListener('click', function() {
         const newItem = medContainer.firstElementChild.cloneNode(true);
         newItem.querySelector('select').selectedIndex = 0;
@@ -646,8 +629,6 @@ foreach ($achats as $achat) {
         medContainer.appendChild(newItem);
         updateMedCount();
     });
-
-    // Supprimer un médicament
     function removeMedicament(element) {
         if (medContainer.children.length > 1) {
             element.parentElement.remove();
@@ -657,15 +638,12 @@ foreach ($achats as $achat) {
         }
     }
 
-    // Mettre à jour le compteur de médicaments
     function updateMedCount() {
         medCount.textContent = medContainer.children.length;
     }
 
-    // Initialiser le compteur
     updateMedCount();
 
-    // Fonction pour ajouter un nouveau médicament dans la modal de modification
     function ajouterMedicament(numAchat) {
         const container = document.getElementById(`nouveauxMedicaments${numAchat}`);
         const counter = container.querySelectorAll('.medicament-group').length + 1;
@@ -704,7 +682,6 @@ foreach ($achats as $achat) {
         `);
     }
 
-    // Gestion du mode suppression
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('[id^="btnToggleSuppression"]').forEach(btn => {
             btn.addEventListener('click', function() {

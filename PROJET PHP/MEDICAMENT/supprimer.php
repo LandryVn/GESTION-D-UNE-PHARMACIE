@@ -7,27 +7,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["numMedoc"])) {
     try {
         $pdo->beginTransaction();
 
-        // 1. Sauvegarder le Design avant suppression
         $stmt = $pdo->prepare("SELECT Design FROM MEDICAMENT WHERE numMedoc = ?");
         $stmt->execute([$numMedoc]);
         $design = $stmt->fetchColumn();
 
-        // 2. Créer un enregistrement fantôme dans STATS_VENTES
         $stmt = $pdo->prepare("INSERT INTO STATS_VENTES 
                              (numAchat, numMedoc, Design, quantite, prix_vente, date_vente)
                              VALUES ('supprime', ?, ?, 0, 0, NOW())");
         $stmt->execute([$numMedoc, $design]);
-       
-// Avant la suppression, archivez le Design
 $stmt = $pdo->prepare("UPDATE DETAIL_ACHAT 
                       SET numMedoc = NULL 
                       WHERE numMedoc = ?");
 $stmt->execute([$numMedoc]);
 
 
-
-
-        // 3. Maintenant supprimer le médicament
         $stmt = $pdo->prepare("DELETE FROM MEDICAMENT WHERE numMedoc = ?");
         $stmt->execute([$numMedoc]);
 

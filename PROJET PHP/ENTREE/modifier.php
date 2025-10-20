@@ -7,7 +7,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stockEntree = $_POST['stockEntree'];
     $dateEntree = $_POST['dateEntree'];
 
-    // Récupérer l'ancienne quantité
     $sqlOld = "SELECT stockEntree, numMedoc FROM ENTREE WHERE numEntree = ?";
     $stmtOld = $pdo->prepare($sqlOld);
     $stmtOld->execute([$numEntree]);
@@ -17,12 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ancienneQuantite = $oldData['stockEntree'];
         $numMedoc = $oldData['numMedoc'];
 
-        // Mettre à jour l'entrée
         $sql = "UPDATE ENTREE SET stockEntree = ?, dateEntree = ? WHERE numEntree = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$stockEntree, $dateEntree, $numEntree]);
 
-        // Mettre à jour le stock du médicament
         if ($numMedoc) {
             $difference = $stockEntree - $ancienneQuantite;
             $sqlUpdate = "UPDATE MEDICAMENT SET stock = stock + ? WHERE numMedoc = ?";

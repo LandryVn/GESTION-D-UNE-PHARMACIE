@@ -32,9 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Système Pharma</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -195,11 +193,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Masquer le message après 5 secondes
+        
         setTimeout(() => {
             const message = document.querySelector('.message');
             if(message) {
@@ -208,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }, 5000);
         
-        // Basculer la visibilité du mot de passe
+       
         document.querySelectorAll('.toggle-password').forEach(button => {
             button.addEventListener('click', function() {
                 const input = this.parentElement.querySelector('input');
@@ -224,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
         
-        // Animation au chargement
+        
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.login-container').style.animation = 'fadeIn 0.6s ease-in-out';
         });

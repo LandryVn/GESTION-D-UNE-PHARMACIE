@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
     try {
         $pdo->beginTransaction();
 
-        // 1. Récupération des anciennes données avec design_archive
         $stmt = $pdo->prepare("
             SELECT 
                 DA.numMedoc,
@@ -29,27 +28,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
         $stmt->execute([$numAchat]);
         $anciensDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // 2. Supprimer les anciennes entrées d'archivage
         $stmt = $pdo->prepare("DELETE FROM STATS_VENTES WHERE numAchat = ?");
         $stmt->execute([$numAchat]);
 
-        // 3. Mettre à jour l'achat principal
         $stmt = $pdo->prepare("UPDATE ACHAT SET nomClient = ?, dateAchat = ? WHERE numAchat = ?");
         $stmt->execute([$nomClient, $dateAchat, $numAchat]);
 
         $nouvelleRecette = 0;
         $nouveau_mois = date('Y-m', strtotime($dateAchat));
 
-        // 4. Traitement des médicaments existants
         foreach ($anciensDetails as $ancien) {
             $numMedoc = $ancien['numMedoc'];
             
             if (in_array($numMedoc, $supprimerMeds)) {
-                // Mise à jour stock
                 $stmt = $pdo->prepare("UPDATE MEDICAMENT SET stock = stock + ? WHERE numMedoc = ?");
                 $stmt->execute([$ancien['nbr'], $numMedoc]);
                 
-                // Suppression du détail
                 $stmt = $pdo->prepare("DELETE FROM DETAIL_ACHAT WHERE numAchat = ? AND numMedoc = ?");
                 $stmt->execute([$numAchat, $numMedoc]);
                 continue;
@@ -58,14 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
             $newQte = $medicamentsExistants[$numMedoc] ?? $ancien['nbr'];
             $diffQte = $ancien['nbr'] - $newQte;
             
-            // Utilisation du design archivé si nécessaire
             $design = !empty($ancien['Design']) ? $ancien['Design'] : $ancien['design_archive'];
             
-            // Mise à jour avec sauvegarde du design
             $stmt = $pdo->prepare("UPDATE DETAIL_ACHAT SET nbr = ?, design_archive = ? WHERE numAchat = ? AND numMedoc = ?");
             $stmt->execute([$newQte, $design, $numAchat, $numMedoc]);
 
-            // Archivage
             $stmt = $pdo->prepare("
                 INSERT INTO STATS_VENTES 
                 (numAchat, numMedoc, Design, quantite, prix_vente, date_vente)
@@ -80,8 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
 
             $nouvelleRecette += $newQte * $ancien['prix_vente'];
         }
-
-        // 5. Traitement des nouveaux médicaments
         foreach ($nouveauxMeds as $nouveau) {
             $numMedoc = $nouveau['numMedoc'];
             $quantite = $nouveau['quantite'];
@@ -93,11 +82,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
             if (!$medoc) throw new Exception("Médicament non trouvé.");
             if ($medoc['stock'] < $quantite) throw new Exception("Stock insuffisant pour ".$medoc['Design']);
             
-            // Insertion avec sauvegarde du design
             $stmt = $pdo->prepare("INSERT INTO DETAIL_ACHAT (numAchat, numMedoc, nbr, prix_vente, design_archive) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$numAchat, $numMedoc, $quantite, $medoc['prix_unitaire'], $medoc['Design']]);
             
-            // Archivage
             $stmt = $pdo->prepare("
                 INSERT INTO STATS_VENTES 
                 (numAchat, numMedoc, Design, quantite, prix_vente, date_vente)
@@ -111,7 +98,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
             $nouvelleRecette += $quantite * $medoc['prix_unitaire'];
         }
 
-        // 6. Mise à jour des statistiques
         $ancienneRecette = array_sum(array_map(function($d) {
             return $d['nbr'] * $d['prix_vente'];
         }, $anciensDetails));

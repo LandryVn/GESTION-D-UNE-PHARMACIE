@@ -50,7 +50,6 @@ try {
     $topMedicaments = [];
 }
 
-// Requête rupture de stock 
 $medicamentsRupture = $pdo->query(
     "SELECT numMedoc, Design, prix_unitaire, stock 
      FROM MEDICAMENT 
@@ -121,8 +120,6 @@ $medicamentsRupture = $pdo->query(
             text-align: center;
             font-size: 1.1rem;
         }
-        
-        /* Main Content Styles */
         #content {
             margin-left: 250px;
             padding: 1.5rem;
@@ -130,8 +127,6 @@ $medicamentsRupture = $pdo->query(
             min-height: 100vh;
             background-color: #f8f9fa;
         }
-        
-        /* Responsive */
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
@@ -351,13 +346,10 @@ $medicamentsRupture = $pdo->query(
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Sidebar toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('content').classList.toggle('sidebar-active');
         });
-        
-        // Close sidebar on mobile when clicking a link
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', function() {
                 if (window.innerWidth < 768) {

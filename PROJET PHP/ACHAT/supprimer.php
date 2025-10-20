@@ -7,14 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['numAchat'])) {
     try {
         $pdo->beginTransaction();
 
-        // 1. Vérifier que l'achat existe
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM ACHAT WHERE numAchat = ?");
         $stmt->execute([$numAchat]);
         if ($stmt->fetchColumn() == 0) {
             throw new Exception("Achat introuvable");
         }
 
-        // 2. Suppression (les données sont déjà archivées lors de l'ajout/modification)
         $stmt = $pdo->prepare("DELETE FROM DETAIL_ACHAT WHERE numAchat = ?");
         $stmt->execute([$numAchat]);
 

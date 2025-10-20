@@ -4,10 +4,8 @@ require_once '../MEDICAMENT/db.php';
 try {
     $pdo->beginTransaction();
 
-    // 1. Nettoyer les mauvaises données
     $pdo->exec("DELETE FROM STATS_VENTES WHERE numMedoc IS NULL OR quantite IS NULL");
 
-    // 2. Migrer les achats actuels
     $stmt = $pdo->query("
         INSERT INTO STATS_VENTES (numAchat, numMedoc, Design, quantite, prix_vente, date_vente)
         SELECT 

@@ -5,7 +5,6 @@ if (isset($_GET['numAchat'])) {
     $numAchat = $_GET['numAchat'];
     
     try {
-        // Récupérer les infos de base de l'achat
         $stmt = $pdo->prepare("SELECT * FROM ACHAT WHERE numAchat = ?");
         $stmt->execute([$numAchat]);
         $achat = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -14,7 +13,6 @@ if (isset($_GET['numAchat'])) {
             throw new Exception("Achat non trouvé");
         }
         
-        // Récupérer les médicaments de cet achat
         $stmt = $pdo->prepare("
             SELECT DA.numMedoc, M.Design, DA.nbr, DA.prix_vente
             FROM DETAIL_ACHAT DA

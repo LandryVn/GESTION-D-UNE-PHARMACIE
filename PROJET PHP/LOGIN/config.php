@@ -1,8 +1,8 @@
 <?php
-$host = "localhost"; // ou l'adresse du serveur MySQL
+$host = "localhost"; 
 $dbname = "utilisateur";
-$username = "root"; // Remplace par ton utilisateur MySQL
-$password = ""; // Remplace par ton mot de passe MySQL
+$username = "root"; 
+$password = ""; 
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);

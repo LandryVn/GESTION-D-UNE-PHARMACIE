@@ -71,7 +71,6 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
             font-size: 1.1rem;
         }
         
-        /* Main Content Styles */
         #content {
             margin-left: 250px;
             padding: 1.5rem;
@@ -80,7 +79,6 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #f8f9fa;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;

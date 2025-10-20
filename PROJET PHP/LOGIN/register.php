@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $pdo->prepare("INSERT INTO utilisateurs (username, password) VALUES (:username, :password)");
 
             if ($stmt->execute(['username' => $username, 'password' => $hashed_password])) {
-                header("Location: login.php"); // Redirection après inscription
+                header("Location: login.php"); 
                 exit();
             } else {
                 $message = "Erreur lors de l'inscription.";
@@ -37,9 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Système Pharma</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -216,11 +214,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Masquer le message après 5 secondes
         setTimeout(() => {
             const message = document.querySelector('.message');
             if(message) {
@@ -229,7 +225,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }, 5000);
         
-        // Basculer la visibilité du mot de passe
         document.querySelectorAll('.toggle-password').forEach(button => {
             button.addEventListener('click', function() {
                 const input = this.parentElement.querySelector('input');
@@ -245,13 +240,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
         
-        // Vérificateur de force du mot de passe
         document.getElementById('password').addEventListener('input', function() {
             const password = this.value;
             const bar = document.getElementById('password-strength-bar');
             const text = document.getElementById('password-strength-text');
             
-            // Calcul de la force (simplifié)
             let strength = 0;
             if (password.length > 0) strength += 1;
             if (password.length >= 8) strength += 1;
@@ -259,7 +252,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (/[0-9]/.test(password)) strength += 1;
             if (/[^A-Za-z0-9]/.test(password)) strength += 1;
             
-            // Mise à jour de l'UI
             const colors = ['red', 'orange', 'yellow', 'lightgreen', 'green'];
             const texts = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort'];
             
@@ -268,7 +260,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text.textContent = 'Force du mot de passe: ' + (texts[strength - 1] || 'Très faible');
         });
         
-        // Animation au chargement
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.register-container').style.animation = 'fadeIn 0.6s ease-in-out';
         });

@@ -15,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 
-// Récupérer les données du médicament
 $numMedoc = $_GET['numMedoc'];
 $sql = "SELECT * FROM MEDICAMENT WHERE numMedoc = :numMedoc";
 $stmt = $pdo->prepare($sql);

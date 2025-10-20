@@ -1,5 +1,4 @@
 <?php
-// Connexion
 try {
     $pdo = new PDO("mysql:host=localhost;dbname=pharmacie", "root", "", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  
@@ -9,16 +8,16 @@ try {
     die("Erreur de connexion : " . $e->getMessage());
 }
 
-// Récupérer tous les médicaments
+
 $query = $pdo->query("SELECT * FROM MEDICAMENT");
 $medicaments = $query->fetchAll();
 
-// Vérifier si la liste est vide
+
 if (!$medicaments) {
     $medicaments = []; 
 }
            
-    // Requête pour les médicaments en rupture
+    
 $ruptureQuery = "SELECT numMedoc, Design, prix_unitaire, stock 
 FROM MEDICAMENT 
 WHERE stock < 5 
@@ -85,7 +84,7 @@ $recette_totale = $stmt->fetchColumn();
             font-size: 1.1rem;
         }
         
-        /* Main Content Styles */
+       
         #content {
             margin-left: 250px;
             padding: 1.5rem;
@@ -94,7 +93,7 @@ $recette_totale = $stmt->fetchColumn();
             background-color: #f8f9fa;
         }
         
-        /*Responsive */
+        
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
@@ -126,7 +125,7 @@ $recette_totale = $stmt->fetchColumn();
             transform: translateY(-3px);
         }
         
-        /*  Tableau  */
+        
         .rounded-table {
             border-collapse: separate;
             border-spacing: 0;
@@ -170,7 +169,7 @@ $recette_totale = $stmt->fetchColumn();
             display: inline-block;
         }
         
-        /* Bouton */
+       
         .btn-action {
             border-radius: 50px;
             padding: 0.5rem 1.25rem;
@@ -399,7 +398,7 @@ $recette_totale = $stmt->fetchColumn();
 
     
     
-    <!-- ajouter -->
+    
     <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -434,7 +433,7 @@ $recette_totale = $stmt->fetchColumn();
         </div>
     </div>
     
-    <!-- modifier -->
+   
     <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -464,9 +463,9 @@ $recette_totale = $stmt->fetchColumn();
                 </form>
             </div>
         </div>
-    </div>
+    </div> 
     
-    <!-- supprimer -->
+    
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

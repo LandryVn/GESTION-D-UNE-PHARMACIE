@@ -2,7 +2,7 @@
 require_once('../MEDICAMENT/db.php');
 
 try {
-    // Requête combinant données archivées et achats actifs
+   
     $query = "
         SELECT 
             mois_annee AS mois,
@@ -37,7 +37,7 @@ try {
     
     $recetteMois = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
-    // Remplissage des 5 derniers mois
+    
     $labels = [];
     $data = [];
     $current = new DateTime('first day of this month');
@@ -63,7 +63,7 @@ try {
         $current->modify('-1 month');
     }
     
-    // Inversion pour ordre chronologique
+    
     $labels = array_reverse($labels);
     $data = array_reverse($data);
 
@@ -79,7 +79,6 @@ try {
     $data = [0, 0, 0, 0, 0];
 }
 
-// Requête rupture de stock 
 $medicamentsRupture = $pdo->query(
     "SELECT numMedoc, Design, prix_unitaire, stock 
      FROM MEDICAMENT 
@@ -151,7 +150,6 @@ $medicamentsRupture = $pdo->query(
             font-size: 1.1rem;
         }
         
-        /* Main Content Styles */
         #content {
             margin-left: 250px;
             padding: 1.5rem;
@@ -160,7 +158,6 @@ $medicamentsRupture = $pdo->query(
             background-color: #f8f9fa;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
@@ -300,7 +297,6 @@ $medicamentsRupture = $pdo->query(
     document.addEventListener("DOMContentLoaded", function() {
         const ctx = document.getElementById('recetteChart').getContext('2d');
         
-        // Palette de couleurs pour chaque mois
         const backgroundColors = [
             'rgba(23, 162, 184, 0.7)',  // Bleu
             'rgba(40, 167, 69, 0.7)',   // Vert
@@ -360,13 +356,11 @@ $medicamentsRupture = $pdo->query(
             }
         });
 
-        // Sidebar toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('content').classList.toggle('sidebar-active');
         });
         
-        // Close sidebar on mobile when clicking a link
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', function() {
                 if (window.innerWidth < 768) {

@@ -1,17 +1,14 @@
 <?php
 include("../MEDICAMENT/db.php");
 
-// Récupérer toutes les entrées
 $sql = "SELECT numEntree, numMedoc, Design, stockEntree, dateEntree FROM ENTREE";
 $stmt = $pdo->query($sql);
 $entrees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Récupérer les médicaments pour le formulaire d'ajout
 $sqlMeds = "SELECT numMedoc, Design FROM MEDICAMENT";
 $stmtMeds = $pdo->query($sqlMeds);
 $medicaments = $stmtMeds->fetchAll(PDO::FETCH_ASSOC);
 
-// Requête pour les médicaments en rupture (pour la sidebar)
 $ruptureQuery = "SELECT numMedoc, Design, prix_unitaire, stock 
                  FROM MEDICAMENT 
                  WHERE stock < 5 
@@ -29,8 +26,8 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --header-bg: #ffffff;  /* Changé en blanc */
-            --header-text: #000000; /* Changé en noir */
+            --header-bg: #ffffff;  
+            --header-text: #000000; 
             --danger-bg: #dc3545;
             --danger-text: white;
             --success-bg: #d4edda;
@@ -81,7 +78,7 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
             font-size: 1.1rem;
         }
         
-        /* Main Content Styles */
+       
         #content {
             margin-left: 250px;
             padding: 1.5rem;
@@ -90,7 +87,7 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #f8f9fa;
         }
         
-        /* Responsive */
+       
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
@@ -273,7 +270,6 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
             </button>
         </div>
         
-        <!-- Messages d'alerte -->
         <?php if (isset($_GET['success'])) : ?>
             <div class="alert alert-success alert-dismissible fade show">
                 <?= htmlspecialchars($_GET['success']) ?>
@@ -325,8 +321,6 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <!-- Modals -->
-    <!-- Modal Ajouter -->
     <div class="modal fade" id="modalAjout" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -370,9 +364,7 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <!-- Modals for each row (Modifier/Supprimer) -->
     <?php foreach ($entrees as $entree) : ?>
-        <!-- Modal Modifier -->
         <div class="modal fade" id="modalModifier<?= $entree['numEntree'] ?>" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -407,7 +399,6 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
-        <!-- Modal Supprimer -->
         <div class="modal fade" id="modalSupprimer<?= $entree['numEntree'] ?>" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -433,16 +424,13 @@ $medicamentsRupture = $ruptureStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     <?php endforeach; ?>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Sidebar toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('content').classList.toggle('sidebar-active');
         });
         
-        // Close sidebar on mobile when clicking a link
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.addEventListener('click', function() {
                 if (window.innerWidth < 768) {
